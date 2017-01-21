@@ -8,6 +8,7 @@ class Email(models.Model):
     # header = models.TextField()
     # body = models.TextField()
     subject = models.CharField(max_length=500)
+    # todo: make the recipient email optional (null=True, blank=True)
     recipient_email = models.EmailField()
     # recipient_ip = models.GenericIPAddressField()
     sender_email = models.EmailField()
