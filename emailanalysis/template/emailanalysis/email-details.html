@@ -1,0 +1,10 @@
+{% if email.pk %}
+    <p>You are looking at email: {{ email.pk }}</p>
+    <ul>
+    {% for host in email.host_set.all %}
+        <li>{{ host.host_name }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No email with this id</p>
+{% endif %}
