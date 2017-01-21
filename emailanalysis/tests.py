@@ -1,11 +1,11 @@
 from django.test import TestCase
 
-from .models import Email, Host, IPAddress
+from .models import Email, Host, IPAddress, Url
 
 
 DEFAULT_HOSTNAME = "test.com"
 DEFAULT_IP_ADDRESS = "0.0.0.0"
-
+DEFAULT_URL = "http://test.com/training/bingo.php"
 
 def create_email():
     return Email.objects.create(full_text="Full email text here", subject="Email me", recipient_email="11hurdj@gmail.com", sender_email="jhurd@test.com", sender_ip="0.0.0.0", submitter="12345678")
@@ -17,6 +17,10 @@ def create_host(host_name=DEFAULT_HOSTNAME):
 
 def create_ip_address(ip_address=DEFAULT_IP_ADDRESS):
     return IPAddress.objects.create(ip_address=ip_address)
+
+
+def create_url(url=DEFAULT_URL):
+    return Url.objects.create(url=url, url_file="bingo.php", host=create_host())
 
 
 # class TestUtility(TestCase):
@@ -47,7 +51,7 @@ class EmailTests(TestCase):
         new_email = create_email()
         new_host = create_host()
 
-        new_email.host_set.add(new_host)
+        new_email.host_set.add(Host.objects.get(pk=1))
         self.assertEqual(new_email.host_set.all()[0].host_name, DEFAULT_HOSTNAME)
 
     def test_create_and_relate_email_with_ip_address(self):
@@ -55,8 +59,16 @@ class EmailTests(TestCase):
         new_email = create_email()
         new_ip_address = create_ip_address()
 
-        new_email.ipaddress_set.add(new_ip_address)
+        new_email.ipaddress_set.add(IPAddress.objects.get(pk=1))
         self.assertEqual(new_email.ipaddress_set.all()[0].ip_address, DEFAULT_IP_ADDRESS)
+
+    def test_create_and_relate_email_with_url(self):
+        """Test relating an email with a URL."""
+        new_email = create_email()
+        new_url = create_url()
+
+        new_email.url_set.add(Url.objects.get(pk=1))
+        self.assertEqual(new_email.url_set.all()[0].url, DEFAULT_URL)
 
 
 class HostTests(TestCase):
@@ -83,6 +95,13 @@ class HostTests(TestCase):
         new_host.ipaddress_set.add(IPAddress.objects.get(pk=1))
         self.assertEqual(new_host.ipaddress_set.all()[0].id, 1)
 
+    def test_create_and_relate_host_with_url(self):
+        """Test relating a host with a URL."""
+        new_host = create_host()
+        new_url = create_url()
+
+        new_host.url_set.add(Url.objects.get(pk=1))
+        self.assertEqual(new_host.url_set.all()[0].id, 1)
 
 
 class IPAddressTests(TestCase):
@@ -108,3 +127,30 @@ class IPAddressTests(TestCase):
 
         new_ip_address.hosts.add(Host.objects.get(pk=1))
         self.assertEqual(new_ip_address.hosts.all()[0].id, 1)
+
+
+class UrlTests(TestCase):
+    """URL related tests."""
+
+    def test_url_create(self):
+        """Test URL creation."""
+        new_url = create_url()
+        self.assertIs(type(new_url.id), int)
+
+    def test_create_and_relate_url_with_email(self):
+        """Test relating an ip address with an email."""
+        new_url = create_url()
+        new_email = create_email()
+
+        new_url.emails.add(Email.objects.get(pk=1))
+        self.assertEqual(new_url.emails.all()[0].id, 1)
+
+
+
+
+
+
+# class AttachmentTests(TestCase):
+#     """Attachment related tests."""
+    
+#     

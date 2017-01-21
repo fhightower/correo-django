@@ -59,15 +59,15 @@ class IPAddress(models.Model):
 #     url_path = models.CharField(max_length=2000)
 
 
-# class Url(models.Model):
-#     """URL class for the URLs' table."""
+class Url(models.Model):
+    """URL class for the URLs' table."""
 
-#     url = models.CharField(max_length=2000)
-#     url_query_string = models.CharField(max_length=2000)
-#     url_path = models.ForeignKey(UrlPath, on_delete=models.CASCADE)
-#     url_file = models.CharField(max_length=255)
-#     ip_address = models.ForeignKey(IPAddress, on_delete=models.CASCADE)
-#     # many to one relationship between URLs and hosts
-#     host = models.ForeignKey(Host, on_delete=models.CASCADE)
-#     emails = models.ManyToManyField(Email)
-#     # todo: add more stuff here...
+    url = models.CharField(max_length=2000)
+    url_query_string = models.CharField(null=True, blank=True, max_length=2000)
+    # url_path = models.ForeignKey(UrlPath, on_delete=models.CASCADE)
+    url_file = models.CharField(null=True, blank=True, max_length=255)
+    # ip_address = models.ForeignKey(IPAddress, on_delete=models.CASCADE)
+    # many to one relationship between URLs and hosts
+    host = models.ForeignKey(Host, on_delete=models.CASCADE)
+    emails = models.ManyToManyField(Email)
+    # todo: add more stuff here...
