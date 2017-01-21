@@ -15,7 +15,7 @@ class Email(models.Model):
     submitter = models.CharField(max_length=8)
 
     def __str__(self):
-        return self.subject
+        return self.id
 
 
 # class Attachment(models.Model):
