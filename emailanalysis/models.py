@@ -14,6 +14,7 @@ class Email(models.Model):
     sender_email = models.EmailField()
     sender_ip = models.GenericIPAddressField(null=True, blank=True)
     submitter = models.CharField(max_length=8)
+    # todo: add a date about the time the email was uploaded
 
     def __str__(self):
         return str(self.id)
