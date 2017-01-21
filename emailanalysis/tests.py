@@ -55,8 +55,8 @@ class EmailTests(TestCase):
         new_email = create_email()
         new_ip_address = create_ip_address()
 
-        new_email.ip_address_set.add(new_ip_address)
-        self.assertEqual(new_email.ip_address_set.all()[0].ip_address, DEFAULT_IP_ADDRESS)
+        new_email.ipaddress_set.add(new_ip_address)
+        self.assertEqual(new_email.ipaddress_set.all()[0].ip_address, DEFAULT_IP_ADDRESS)
 
 
 class HostTests(TestCase):
@@ -80,8 +80,8 @@ class HostTests(TestCase):
         new_host = create_host()
         new_ip_address = create_ip_address()
 
-        new_host.ip_address_set.add(IPAddress.objects.get(pk=1))
-        self.assertEqual(new_host.ip_address_set.all()[0].id, 1)
+        new_host.ipaddress_set.add(IPAddress.objects.get(pk=1))
+        self.assertEqual(new_host.ipaddress_set.all()[0].id, 1)
 
 
 
