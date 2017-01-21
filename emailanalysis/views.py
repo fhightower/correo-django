@@ -18,7 +18,3 @@ def upload(request):
 class EmailDetailView(generic.DetailView):
     model = Email
     template_name = 'emailanalysis/email-details.html'
-
-# def details(request, email_id):
-#     email = get_object_or_404(Email, pk=email_id)
-#     return render(request, 'emailanalysis/specific-email.html', {'email': email})
