@@ -7,9 +7,16 @@ from django.views import generic
 from .models import Email
 
 
-def index(request):
-    return HttpResponse("You're on the email analysis page!")
+class EmailAnalysisHome(generic.ListView):
+    template_name = "emailanalysis/index.html"
+    context_object_name = 'recent_emails'
 
+    def get_queryset(self):
+        """
+        Return the five, most recently updated, emails.
+        """
+        # todo: implement this more thoroughly
+        return Email.objects.all()[:5]
 
 def upload(request):
     return HttpResponse("You're on the email upload page!")
@@ -17,4 +24,4 @@ def upload(request):
 
 class EmailDetailView(generic.DetailView):
     model = Email
-    template_name = 'emailanalysis/email-details.html'
+    template_name = "emailanalysis/email-details.html"

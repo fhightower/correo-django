@@ -1,5 +1,10 @@
-{% if email_id %}
-    <p>You are looking at email: {{ email_id }}</p>
+<h1>Recent Emails:</h1>
+{% if recent_emails %}
+    <ul>
+    {% for email in recent_emails %}
+        <li><a href="{% url 'emailanalysis:details' email.id %}">{{ email.subject }}</a></li>
+    {% endfor %}
+    </ul>
 {% else %}
-    <p>No email with this id</p>
+    <p>No emails are available.</p>
 {% endif %}
