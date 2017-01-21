@@ -1,8 +1,17 @@
 {% if email.pk %}
     <p>You are looking at email: {{ email.pk }}</p>
+
+    <h3>Hosts:</h3>
     <ul>
     {% for host in email.host_set.all %}
         <li>{{ host.host_name }}</li>
+    {% endfor %}
+    </ul>
+
+    <h3>IP Addresses:</h3>
+    <ul>
+    {% for address in email.ipaddress_set.all %}
+        <li>{{ address.ip_address }}</li>
     {% endfor %}
     </ul>
 {% else %}
