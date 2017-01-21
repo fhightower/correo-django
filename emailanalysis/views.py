@@ -1,6 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
-# from django.views import generic
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.views import generic
 
 from .models import Email
 
@@ -13,6 +15,10 @@ def upload(request):
     return HttpResponse("You're on the email upload page!")
 
 
-def details(request, email_id):
-    email = get_object_or_404(Email, pk=email_id)
-    return render(request, 'emailanalysis/specific-email.html', {'email': email})
+class EmailDetailView(generic.DetailView):
+    model = Email
+    template_name = 'emailanalysis/email-details.html'
+
+# def details(request, email_id):
+#     email = get_object_or_404(Email, pk=email_id)
+#     return render(request, 'emailanalysis/specific-email.html', {'email': email})
