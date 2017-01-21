@@ -41,16 +41,16 @@ class Host(models.Model):
         return self.host_name
 
 
-# class IPAddress(models.Model):
-#     """Database model for handling IP addresses."""
+class IPAddress(models.Model):
+    """Database model for handling IP addresses."""
 
-#     # todo: add more stuff here...
-#     ip_address = models.CharField(max_length=15)
-#     hosts = models.ManyToManyField(Host)
-#     # emails = models.ManyToManyField(Email)
+    # todo: add more stuff here...
+    ip_address = models.CharField(max_length=15)
+    hosts = models.ManyToManyField(Host)
+    emails = models.ManyToManyField(Email)
 
-#     def __str__(self):
-#         return self.ip_address
+    def __str__(self):
+        return self.ip_address
 
 
 # class UrlPath(models.Model):
