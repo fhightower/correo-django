@@ -7,14 +7,14 @@ class Email(models.Model):
     full_text = models.TextField()
     # header = models.TextField()
     # body = models.TextField()
-    subject = models.CharField(max_length=500)
     # todo: make the recipient email optional (null=True, blank=True)
     recipient_email = models.EmailField()
     # recipient_ip = models.GenericIPAddressField()
     sender_email = models.EmailField()
     sender_ip = models.GenericIPAddressField(null=True, blank=True)
+    subject = models.CharField(max_length=500)
+    submission_date = models.DateTimeField(auto_now_add=True)
     submitter = models.CharField(max_length=8)
-    # todo: add a date about the time the email was uploaded
 
     def __str__(self):
         return str(self.id)
@@ -34,9 +34,17 @@ class Email(models.Model):
 class Host(models.Model):
     """Host class for the hosts' table."""
 
+    host_source_choices = (
+        ("B", "Email Body"),
+        ("R", "Recipient email address"),
+        ("S", "Sender email address"),
+        ("U", "From URL"),
+    )
+
     # todo: add more stuff here...
-    host_name = models.CharField(max_length=255)
     emails = models.ManyToManyField(Email)
+    host_name = models.CharField(max_length=255)
+    source = models.CharField(choices=host_source_choices)
 
     def __str__(self):
         return self.host_name
@@ -54,20 +62,13 @@ class IPAddress(models.Model):
         return self.ip_address
 
 
-# class UrlPath(models.Model):
-#     """Database model for URL path."""
-
-#     url_path = models.CharField(max_length=2000)
-
-
 class Url(models.Model):
     """URL class for the URLs' table."""
 
     url = models.CharField(max_length=2000)
     url_query_string = models.CharField(null=True, blank=True, max_length=2000)
-    # url_path = models.ForeignKey(UrlPath, on_delete=models.CASCADE)
+    url_path = models.CharField(default="/", max_length=500)
     url_file = models.CharField(null=True, blank=True, max_length=255)
-    # ip_address = models.ForeignKey(IPAddress, on_delete=models.CASCADE)
     # many to one relationship between URLs and hosts
     host = models.ForeignKey(Host, on_delete=models.CASCADE)
     emails = models.ManyToManyField(Email)
