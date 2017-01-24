@@ -44,7 +44,7 @@ class Host(models.Model):
     # todo: add more stuff here...
     emails = models.ManyToManyField(Email)
     host_name = models.CharField(max_length=255)
-    source = models.CharField(choices=host_source_choices)
+    source = models.CharField(max_length=1, choices=host_source_choices)
 
     def __str__(self):
         return self.host_name
