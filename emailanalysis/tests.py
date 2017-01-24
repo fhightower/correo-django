@@ -3,12 +3,13 @@ from django.test import TestCase
 from .models import Email, Host, IPAddress, Url
 
 
+DEFAULT_SUBJECT = "Email me"
 DEFAULT_HOSTNAME = "test.com"
 DEFAULT_IP_ADDRESS = "0.0.0.0"
 DEFAULT_URL = "http://test.com/training/bingo.php"
 
 def create_email():
-    return Email.objects.create(full_text="Full email text here", subject="Email me", recipient_email="11hurdj@gmail.com", sender_email="jhurd@test.com", sender_ip="0.0.0.0", submitter="12345678")
+    return Email.objects.create(full_text="Full email text here", subject=DEFAULT_SUBJECT, recipient_email="11hurdj@gmail.com", sender_email="jhurd@test.com", sender_ip="0.0.0.0", submitter="12345678")
 
 
 def create_host(host_name=DEFAULT_HOSTNAME):
@@ -23,19 +24,29 @@ def create_url(url=DEFAULT_URL):
     return Url.objects.create(url=url, url_file="bingo.php", host=create_host())
 
 
-# class TestUtility(TestCase):
-#     """Utility for performing repetative tests."""
+class TestUtility(TestCase):
+    """Utility for performing repetative tests."""
 
-#     def test_associations(object1, object2, storage_location1, storage_location2):
-#         """Test associations in two different ways:
-#             object1 and object 2 are two, newly created items which will be associated with one another. Object1 will be associated with object2 by adding object2 to object1.storage_location1. If that works, object 1 will then be associated with object2 by adding object1 to object2.storage_location2.
-#         """
-#         # test out the first
-#         object1.storage_location1.add(object2)
-#         object1.storage_location1.remove(object2)
+    def association_test(self, object1, object2, storage_location1, storage_location2, many_to_one=False):
+        """Test two-way associations."""
+        # test relating the first object with the second
+        storage_location1.add(object2)
+        self.assertEqual(storage_location1.all()[0].id, 1)
 
-#         # test out the second relationship
-#         object2.storage_location2.add(object1)
+        # test relating the second object with the first
+        if not many_to_one:
+            storage_location2.add(object1)
+            self.assertEqual(storage_location2.all()[0].id, 1)
+        else:
+            storage_location2 = object1
+            self.assertEqual(storage_location2.id, 1)
+
+    def string_test(self, incoming_object, desired_string):
+        """Test to make sure and object's string matches up to the desired string."""
+        self.assertEqual(str(incoming_object), desired_string)
+
+
+relater = TestUtility()
 
 
 class EmailTests(TestCase):
@@ -46,29 +57,31 @@ class EmailTests(TestCase):
         new_email = create_email()
         self.assertIs(type(new_email.id), int)
 
-    def test_create_and_relate_email_with_host(self):
+    def test_email_str(self):
+        """Test email string."""
+        new_email = create_email()
+        relater.string_test(new_email, "1")
+
+    def test_relate_email_y_host(self):
         """Test relating an email with a host."""
         new_email = create_email()
         new_host = create_host()
 
-        new_email.host_set.add(Host.objects.get(pk=1))
-        self.assertEqual(new_email.host_set.all()[0].host_name, DEFAULT_HOSTNAME)
+        relater.association_test(new_email, new_host, new_email.host_set, new_host.emails)
 
-    def test_create_and_relate_email_with_ip_address(self):
-        """Test relating an email with an ip address."""
+    def test_relate_email_y_ip_address(self):
+        """Test relating an email with an IP address."""
         new_email = create_email()
         new_ip_address = create_ip_address()
 
-        new_email.ipaddress_set.add(IPAddress.objects.get(pk=1))
-        self.assertEqual(new_email.ipaddress_set.all()[0].ip_address, DEFAULT_IP_ADDRESS)
+        relater.association_test(new_email, new_ip_address, new_email.ipaddress_set, new_ip_address.emails)
 
-    def test_create_and_relate_email_with_url(self):
+    def test_relate_email_y_url(self):
         """Test relating an email with a URL."""
         new_email = create_email()
         new_url = create_url()
 
-        new_email.url_set.add(Url.objects.get(pk=1))
-        self.assertEqual(new_email.url_set.all()[0].url, DEFAULT_URL)
+        relater.association_test(new_email, new_url, new_email.url_set, new_url.emails)
 
 
 class HostTests(TestCase):
@@ -79,29 +92,24 @@ class HostTests(TestCase):
         new_host = create_host()
         self.assertIs(type(new_host.id), int)
 
-    def test_create_and_relate_host_with_email(self):
-        """Test relating a host with an email."""
+    def test_host_str(self):
+        """Test host string."""
         new_host = create_host()
-        new_email = create_email()
+        relater.string_test(new_host, DEFAULT_HOSTNAME)
 
-        new_host.emails.add(Email.objects.get(pk=1))
-        self.assertEqual(new_host.emails.all()[0].id, 1)
-
-    def test_create_and_relate_host_with_ip_address(self):
+    def test_relate_host_y_ip_address(self):
         """Test relating a host with an ip address."""
         new_host = create_host()
         new_ip_address = create_ip_address()
 
-        new_host.ipaddress_set.add(IPAddress.objects.get(pk=1))
-        self.assertEqual(new_host.ipaddress_set.all()[0].id, 1)
+        relater.association_test(new_host, new_ip_address, new_host.ipaddress_set, new_ip_address.hosts)
 
-    def test_create_and_relate_host_with_url(self):
+    def test_relate_host_y_url(self):
         """Test relating a host with a URL."""
         new_host = create_host()
         new_url = create_url()
 
-        new_host.url_set.add(Url.objects.get(pk=1))
-        self.assertEqual(new_host.url_set.all()[0].id, 1)
+        relater.association_test(new_host, new_url, new_host.url_set, new_url.host, True)
 
 
 class IPAddressTests(TestCase):
@@ -112,21 +120,11 @@ class IPAddressTests(TestCase):
         new_ip_address = create_ip_address()
         self.assertIs(type(new_ip_address.id), int)
 
-    def test_create_and_relate_ip_address_with_email(self):
-        """Test relating an ip address with an email."""
+    def test_ip_address_str(self):
+        """Test ip_address string."""
         new_ip_address = create_ip_address()
-        new_email = create_email()
+        relater.string_test(new_ip_address, DEFAULT_IP_ADDRESS)
 
-        new_ip_address.emails.add(Email.objects.get(pk=1))
-        self.assertEqual(new_ip_address.emails.all()[0].id, 1)
-
-    def test_create_and_relate_ip_address_with_host(self):
-        """Test relating an ip address with a host."""
-        new_ip_address = create_ip_address()
-        new_host = create_host()
-
-        new_ip_address.hosts.add(Host.objects.get(pk=1))
-        self.assertEqual(new_ip_address.hosts.all()[0].id, 1)
 
 
 class UrlTests(TestCase):
@@ -137,20 +135,7 @@ class UrlTests(TestCase):
         new_url = create_url()
         self.assertIs(type(new_url.id), int)
 
-    def test_create_and_relate_url_with_email(self):
-        """Test relating an ip address with an email."""
+    def test_url_str(self):
+        """Test url string."""
         new_url = create_url()
-        new_email = create_email()
-
-        new_url.emails.add(Email.objects.get(pk=1))
-        self.assertEqual(new_url.emails.all()[0].id, 1)
-
-
-
-
-
-
-# class AttachmentTests(TestCase):
-#     """Attachment related tests."""
-    
-#     
+        relater.string_test(new_url, DEFAULT_URL)

@@ -72,3 +72,6 @@ class Url(models.Model):
     host = models.ForeignKey(Host, on_delete=models.CASCADE)
     emails = models.ManyToManyField(Email)
     # todo: add more stuff here...
+
+    def __str__(self):
+        return self.url
