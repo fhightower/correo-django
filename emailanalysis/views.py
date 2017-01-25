@@ -18,9 +18,9 @@ class EmailAnalysisHome(generic.ListView):
         # todo: implement this more thoroughly
         return Email.objects.all()[:5]
 
-def upload(request):
-    return HttpResponse("You're on the email upload page!")
 
+def upload(request):
+    return render(request, 'emailanalysis/upload.html')
 
 class EmailDetailView(generic.DetailView):
     model = Email
