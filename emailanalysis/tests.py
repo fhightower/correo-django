@@ -162,9 +162,9 @@ class ViewTests(TestCase):
         self.assertContains(response, new_email.id)
         self.assertQuerysetEqual(response.context['recent_emails'], ["<Email: 1>"])
 
-    def test_upload_view(self):
-        """Test emailanalysis:upload."""
-        response = self.client.get(reverse("emailanalysis:upload"))
+    def test_import_view(self):
+        """Test emailanalysis:import."""
+        response = self.client.get(reverse("emailanalysis:import"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Full Email Text")
 

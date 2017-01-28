@@ -21,8 +21,8 @@ class EmailDetailView(generic.DetailView):
     template_name = "emailanalysis/email-details.html"
 
 
-def upload(request):
-    return render(request, 'emailanalysis/upload.html')
+def import_(request):
+    return render(request, 'emailanalysis/import.html')
 
 
 def review(request):
