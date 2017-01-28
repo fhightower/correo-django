@@ -168,10 +168,18 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Full Email Text")
 
-    def test_review_view(self):
-        """Test emailanalysis:review."""
-        response = self.client.get(reverse("emailanalysis:review"))
+    def test_submit_view(self):
+        """Test emailanalysis:submit."""
+        response = self.client.post(reverse("emailanalysis:submit"), {
+            'full-text': "Full email text here",
+            'subject': DEFAULT_SUBJECT,
+            'recipient-email': "11hurdj@gmail",
+            'sender-email': "jhurd@test.com",
+            'sender-ip': "0.0.0.0"
+        })
+        print(Email.objects.all())
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(Email.objects.all()[0].id, 1)
 
     def test_email_detail_view(self):
         """Test emailanalysis:details."""
