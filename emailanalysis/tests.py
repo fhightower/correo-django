@@ -177,7 +177,6 @@ class ViewTests(TestCase):
             'sender-email': "jhurd@test.com",
             'sender-ip': "0.0.0.0"
         })
-        print(Email.objects.all())
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Email.objects.all()[0].id, 1)
 
