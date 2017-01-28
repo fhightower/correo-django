@@ -1,0 +1,9 @@
+<h1>Review page</h1>
+
+{% if email_subject %}
+    <p>Email subject is {{ email_subject }}</p>
+{% else %}
+    <p>No email subject found :(</p>
+{% endif %}
+
+<a href="{% url 'emailanalysis:upload' %}">< Return to upload page</a>
