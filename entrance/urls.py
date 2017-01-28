@@ -6,5 +6,5 @@ app_name = 'entrance'
 urlpatterns = [
     url(r'^$', views.index, name="index"),
     url(r'^about/', views.about, name="about"),
-    url(r'^buy/', views.buy, name="buy")
+    url(r'^buy/', views.invest, name="invest")
 ]

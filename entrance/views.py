@@ -1,15 +1,14 @@
-from django.shortcuts import render
-
-from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, render
+from django.views import generic
 
 
 def index(request):
-    return HttpResponse("Your on the home page!")
+    return render(request, 'entrance/index.html')
 
 
 def about(request):
-    return HttpResponse("Your on the about page!")
+    return render(request, 'entrance/about.html')
 
 
-def buy(request):
-    return HttpResponse("Your on the buy page!")
+def invest(request):
+    return render(request, 'entrance/invest.html')

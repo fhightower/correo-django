@@ -56,7 +56,7 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['emailanalysis/template'],
+        'DIRS': ['emailanalysis/template', 'entrance/template'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
