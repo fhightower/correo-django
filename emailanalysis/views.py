@@ -27,7 +27,7 @@ def upload(request):
     return render(request, 'emailanalysis/upload.html')
 
 
-def review(request):
+def submit(request):
     try:
         full_email_text = request.POST['full-text']
         email_subject = request.POST['subject']

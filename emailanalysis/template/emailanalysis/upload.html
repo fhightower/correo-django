@@ -1,6 +1,6 @@
 <h1>Upload</h1>
 
-<form action="{% url 'emailanalysis:review' %}" method="post">
+<form action="{% url 'emailanalysis:submit' %}" method="post">
 {% csrf_token %}
     <label>Full Email Text</label><br />
     <textarea id="full-text" name="full-text"></textarea>
