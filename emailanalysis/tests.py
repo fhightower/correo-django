@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.urls import reverse
 
 from .models import Email, Host, IPAddress, Url
 
@@ -139,3 +140,50 @@ class UrlTests(TestCase):
         """Test url string."""
         new_url = create_url()
         relater.string_test(new_url, DEFAULT_URL)
+
+class ViewTests(TestCase):
+    """View related tests."""
+
+    def test_email_analysis_index_view(self):
+        """Test emailanalysis:index."""
+        response = self.client.get(reverse("emailanalysis:index"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "No emails are available.")
+        self.assertQuerysetEqual(response.context['recent_emails'], [])
+
+    def test_email_analysis_index_view_after_email_creation(self):
+        """Test emailanalysis:index after an email has been created."""
+        # create a new email
+        new_email = create_email()
+        # get the response from the emailanalysis index page
+        response = self.client.get(reverse("emailanalysis:index"))
+        self.assertEqual(response.status_code, 200)
+        # check for newly created email's id on page
+        self.assertContains(response, new_email.id)
+        self.assertQuerysetEqual(response.context['recent_emails'], ["<Email: 1>"])
+
+    def test_import_view(self):
+        """Test emailanalysis:import."""
+        response = self.client.get(reverse("emailanalysis:import"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Full Email Text")
+
+    def test_submit_view(self):
+        """Test emailanalysis:submit."""
+        response = self.client.post(reverse("emailanalysis:submit"), {
+            'full-text': "Full email text here",
+            'subject': DEFAULT_SUBJECT,
+            'recipient-email': "11hurdj@gmail",
+            'sender-email': "jhurd@test.com",
+            'sender-ip': "0.0.0.0"
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Email.objects.all()[0].id, 1)
+
+    def test_email_detail_view(self):
+        """Test emailanalysis:details."""
+        new_email = create_email()
+        # be sure to pass the id of the new email into the client as an argument
+        response = self.client.get(reverse("emailanalysis:details", args=(new_email.id,)))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "You are looking at email: {}".format(new_email.id))

@@ -23,8 +23,8 @@ class EmailDetailView(generic.DetailView):
     template_name = "emailanalysis/email-details.html"
 
 
-def upload(request):
-    return render(request, 'emailanalysis/upload.html')
+def import_(request):
+    return render(request, 'emailanalysis/import.html')
 
 
 def review(request):
@@ -35,14 +35,14 @@ def review(request):
         recipient_email = request.POST['recipient-email']
         sender_email = request.POST['sender-email']
         sender_ip_address = request.POST['sender-ip']
-    except (KeyError):
+    except KeyError as e:
+        print("Error creating email: {}".format(e))
         # Redisplay the question voting form.
         # todo: implement an error message
         # return render(request, 'polls/detail.html', {
         #     'question': question,
         #     'error_message': "You didn't select a choice.",
         # })
-        pass
     else:
         new_email = Email(full_text=full_email_text, subject=email_subject, recipient_email=recipient_email, sender_email=sender_email, sender_ip=sender_ip_address, submitter="12345678")
         new_email.save()
