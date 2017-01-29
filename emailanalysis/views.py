@@ -1,4 +1,6 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
 from django.views import generic
 
 from .models import Email
@@ -25,7 +27,8 @@ def import_(request):
     return render(request, 'emailanalysis/import.html')
 
 
-def submit(request):
+def review(request):
+    print("here")
     try:
         full_email_text = request.POST['full-text']
         email_subject = request.POST['subject']
@@ -43,4 +46,4 @@ def submit(request):
     else:
         new_email = Email(full_text=full_email_text, subject=email_subject, recipient_email=recipient_email, sender_email=sender_email, sender_ip=sender_ip_address, submitter="12345678")
         new_email.save()
-        return HttpResponseRedirect(reverse('emailanalysis:details', args=(new_email.id)))
+        return HttpResponseRedirect(reverse('emailanalysis:details', args=(new_email.id,)))
