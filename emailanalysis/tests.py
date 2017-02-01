@@ -139,3 +139,29 @@ class UrlTests(TestCase):
         """Test url string."""
         new_url = create_url()
         relater.string_test(new_url, DEFAULT_URL)
+
+class ViewTests(TestCase):
+    """View related tests."""
+
+    def test_index_view(self):
+        """Test the index view."""
+        response = self.client.get('/email/')
+        self.assertContains(response, "Recent Emails:")
+
+    def test_index_view_after_email_creation(self):
+        """Test the index view when an email has been created."""
+        new_email = create_email()
+        response = self.client.get('/email/')
+        self.assertContains(response, new_email.subject)
+
+    def test_import_view(self):
+        """Test the import view."""
+        response = self.client.get('/email/import/')
+        self.assertContains(response, "Upload")
+
+    def test_email_details_view(self):
+        """Test the email details view."""
+        new_email = create_email()
+        response = self.client.get("/email/{}/".format(new_email.id))
+        self.assertContains(response, new_email.subject)
+
