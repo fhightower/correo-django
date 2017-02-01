@@ -1,6 +1,14 @@
 {% if email.pk %}
     <p>You are looking at email: {{ email.pk }}</p>
 
+    <h3>Email Details:</h3>
+    <ul>
+        <li>Subject: {{ email.subject }}</li>
+        <li>To: {{ email.recipient_email }}</li>
+        <li>From: {{ email.sender_email }}</li>
+        <li>From IP: {{ email.sender_ip }}</li>
+    </ul>
+
     <h3>Hosts:</h3>
     <ul>
     {% for host in email.host_set.all %}
