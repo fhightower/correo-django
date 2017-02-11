@@ -26,6 +26,7 @@ def import_(request):
 
 
 def submit(request):
+    """Handle email import (using individual form elements)."""
     try:
         full_email_text = request.POST['full-text']
         email_subject = request.POST['subject']
@@ -44,3 +45,10 @@ def submit(request):
         new_email = Email(full_text=full_email_text, subject=email_subject, recipient_email=recipient_email, sender_email=sender_email, sender_ip=sender_ip_address, submitter="12345678")
         new_email.save()
         return HttpResponseRedirect(reverse('emailanalysis:details', args=(new_email.id,)))
+
+
+def submit_file(request):
+    """Handle an email that is uploaded as a file."""
+    # return HttpResponseRedirect(reverse('emailanalysis:details', args=(new_email.id,)))
+    print(request.POST)
+    return HttpResponseRedirect(reverse('emailanalysis:details', args=(1,)))

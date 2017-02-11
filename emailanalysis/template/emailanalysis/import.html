@@ -35,7 +35,7 @@
     <input type="submit" value="Upload" />
 </form>
 
-<form action="/target" class="dropzone" id="my-dropzone"></form>
+<form id="my-dropzone" action="{% url 'emailanalysis:submit_file' %}" method="post" class="dropzone">{% csrf_token %}</form>
 <button id="submit-all">Submit all files</button>
 
 <a href="{% url 'emailanalysis:index' %}">< Return to email analysis page</a>
