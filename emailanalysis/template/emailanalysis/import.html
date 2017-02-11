@@ -1,3 +1,8 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'emailanalysis/dropzone.css' %}" />
+<script type="text/javascript" src="{% static 'emailanalysis/dropzone.js' %}"></script>
+
 <h1>Upload</h1>
 
 <form action="{% url 'emailanalysis:submit' %}" method="post">
@@ -30,4 +35,9 @@
     <input type="submit" value="Upload" />
 </form>
 
+<form action="/target" class="dropzone" id="my-dropzone"></form>
+<button id="submit-all">Submit all files</button>
+
 <a href="{% url 'emailanalysis:index' %}">< Return to email analysis page</a>
+
+<script type="text/javascript" src="{% static 'emailanalysis/dropTest.js' %}"></script>
