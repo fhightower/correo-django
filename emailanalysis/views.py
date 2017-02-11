@@ -11,9 +11,7 @@ class EmailAnalysisHome(generic.ListView):
     context_object_name = 'recent_emails'
 
     def get_queryset(self):
-        """
-        Return the five, most recently updated, emails.
-        """
+        """Return the five, most recently updated, emails."""
         # todo: implement this more thoroughly
         return Email.objects.all()[:5]
 
