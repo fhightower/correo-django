@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
+import email
 
 from .models import Email
 
@@ -49,6 +50,27 @@ def submit(request):
 
 def submit_file(request):
     """Handle an email that is uploaded as a file."""
-    # return HttpResponseRedirect(reverse('emailanalysis:details', args=(new_email.id,)))
     print(request.POST)
+    print(request.FILES)
+    try:
+        print(request.FILES['file'])
+    except:
+        pass
     return HttpResponseRedirect(reverse('emailanalysis:details', args=(1,)))
+
+
+def upload_file(self, request, *args, **kwargs):
+    try:
+        album = Album.objects.get(pk=kwargs.get('pk'))
+    except Album.DoesNotExist:
+        error_dict = {'message': 'Album not found.'}
+        return self.render_json_response(error_dict, status=404)
+
+    uploaded_file = request.FILES['file']
+    Photo.objects.create(album=album, file=uploaded_file)
+
+    response_dict = {
+        'message': 'File uploaded successfully!',
+    }
+
+    return self.render_json_response(response_dict, status=200)
