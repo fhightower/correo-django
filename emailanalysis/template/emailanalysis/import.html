@@ -39,7 +39,7 @@
 <!--<form id="my-dropzone" action="{% url 'emailanalysis:submit_file' %}" method="post" class="dropzone" name="email-file">{% csrf_token %}</form>
 <button id="submit-all">Submit all files</button>-->
 
-<form id="my-awesome-dropzone" class="dropzone" action="{% url 'emailanalysis:submit_file' %}" method="post" name="email-file">
+<form id="my-awesome-dropzone" class="dropzone" action="{% url 'emailanalysis:submit_file' %}" method="post" enctype="multipart/form-data" name="email-file">
 {% csrf_token %}
   <div class="dropzone-previews"></div> <!-- this is were the previews should be shown. -->
   <button type="submit">Submit data and files!</button>
