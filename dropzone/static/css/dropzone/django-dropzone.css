@@ -1,0 +1,11 @@
+.djdropzone .djdropzone-dropzone.dropzone .dz-message {
+    font-size: 1.4em;
+}
+
+
+.djdropzone .djdropzone-dropzone.dropzone.dz-started .dz-message {
+    display: block;
+    margin: 0;
+    text-align: left;
+    font-size: 1em;
+}

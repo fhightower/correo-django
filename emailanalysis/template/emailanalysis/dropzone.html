@@ -1,0 +1,16 @@
+<div id="djdropzone-{{ uid }}" class="djdropzone" data-field-name="{{ name }}" data-dropzone-config="{{ dropzone_config_json }}">
+  <div class="djdropzone-loading hidden">Loading previously uploaded files...</div>
+
+  <div id="djdropzone-dropzone-{{ uid }}" class="djdropzone-dropzone">
+    <div class="vertical-align">
+
+      <div class="dz-message text-center text-muted">
+        {# TODO: Make this message customizable. #}
+        <strong>Click</strong> here to select files from your computer or <strong>drag and drop</strong> them in this box.
+      </div>
+
+    </div>
+  </div>
+
+  <input id="djdropzone-{{ uid }}-input" type="hidden" name="{{ name }}" value="{{ value }}" />
+</div>
