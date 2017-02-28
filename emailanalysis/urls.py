@@ -5,7 +5,7 @@ from . import views
 app_name = 'emailanalysis'
 urlpatterns = [
     url(r'^$', views.EmailAnalysisHome.as_view(), name='index'),
-    url(r'^import/$', views.import_, name='import'),
+    url(r'^import/$', views.ExampleFormView.as_view(), name='import'),
     url(r'^import/submit$', views.submit, name='submit'),
     url(r'^import/submitFile$', views.submit_file, name='submit_file'),
     url(r'^(?P<pk>[0-9]+)/$', views.EmailDetailView.as_view(), name='details'),

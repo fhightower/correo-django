@@ -30,6 +30,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'dropzone',
+    'file_uploads',
     'emailanalysis.apps.EmailanalysisConfig',
     'entrance.apps.EntranceConfig',
     'django.contrib.admin',
