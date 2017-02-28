@@ -1,5 +1,5 @@
 from django.core.files import File
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
@@ -51,13 +51,40 @@ def submit(request):
 
 def submit_file(request):
     """Handle an email that is uploaded as a file."""
-    try:
-        # from django.core.files import File
-        my_file = File(request.FILES['file'])
-        print(my_file.read())
-    except:
-        pass
-    return HttpResponseRedirect(reverse('emailanalysis:details', args=(1,)))
+    redirect_id = 1
+    # todo: figure out why there are two post requests coming in here when uploading a file (I am almost positive it has to do with drop-zone)
+    if request.FILES.get('file'):
+        try:
+            # read the file sent in the POST
+            my_file = File(request.FILES['file'])
+            raw_email = my_file.read()
+        except Exception as e:
+            # handle any errors retrieving the file from the POST
+            # todo: add error message here
+            print(e)
+            # return HttpResponseRedirect(reverse('emailanalysis:details', args=(redirect_id,)))
+        else:
+            # parse and create a new email object
+            try:
+                parsed_email = email.message_from_string(raw_email.decode())
+            except Exception as e:
+                # todo: add error handling here
+                raise e
+            else:
+                subject = parsed_email.get('subject')
+                recipient_email = parsed_email.get('to')
+                sender_email = parsed_email.get('from')
+                sender_ip = parsed_email.get('x-originating-ip')
+
+                # todo: implement submitter id creation
+                new_email = Email(full_text=raw_email, subject=subject, recipient_email=recipient_email, sender_email=sender_email, sender_ip=sender_ip, submitter="12345678")
+                new_email.save()
+                redirect_id = new_email.id
+
+            print(redirect_id)
+            return HttpResponseRedirect(reverse('emailanalysis:details', args=(redirect_id,)))
+    else:
+        return HttpResponse()
 
 
 # def upload_file(self, request, *args, **kwargs):
