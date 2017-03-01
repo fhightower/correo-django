@@ -7,7 +7,7 @@ class ExampleForm(forms.Form):
         widget=DropzoneInput(dropzone_config={
             "maxFilesize": 10,
             # "acceptedFiles": "image/*",
-            "url": '/file_uploads/upload/',
+            "url": '/email/import/upload/',
             "addRemoveLinks": True
         })
     )
