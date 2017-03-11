@@ -40,6 +40,15 @@ temp_email_data = {
     'sender_ip': None
 }
 
+# temp_email_data = {
+#     "this_email": {
+#         'subject': None,
+#         'recipient_email': None,
+#         'sender_email': None,
+#         'sender_ip': None
+#     }
+# }
+
 
 def parse(request):
     try:
@@ -55,6 +64,7 @@ def parse(request):
             parsed_email = email.message_from_string(full_email_text)
             temp_email_data['subject'] = parsed_email.get('subject')
             temp_email_data['recipient_email'] =  parsed_email.get('to')
+            temp_email_data['reply_to'] = parsed_email.get('reply-to')
             temp_email_data['sender_email'] = parsed_email.get('from')
             temp_email_data['sender_ip'] = parsed_email.get('x-originating-ip')
         else:
