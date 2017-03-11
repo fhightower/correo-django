@@ -8,6 +8,10 @@ from django.views import generic
 from .models import Email
 
 
+CONFIG = {
+    "detail_view_list_length": 7
+}
+
 class EmailAnalysisHome(generic.ListView):
     template_name = "emailanalysis/index.html"
     context_object_name = 'recent_emails'
@@ -16,7 +20,7 @@ class EmailAnalysisHome(generic.ListView):
         """
         Return the five, most recently updated, emails.
         """
-        return Email.objects.all()[ len(Email.objects.all()) - 5:]
+        return Email.objects.all()[ len(Email.objects.all()) - CONFIG['detail_view_list_length']:]
 
 
 class EmailDetailView(generic.DetailView):
