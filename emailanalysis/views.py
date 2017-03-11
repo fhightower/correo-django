@@ -27,7 +27,7 @@ def import_(request):
     return render(request, 'emailanalysis/import.html')
 
 
-def submit(request):
+def parse(request):
     try:
         if request.POST.get('full-text'):
             full_email_text = request.POST['full-text']

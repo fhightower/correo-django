@@ -1,6 +1,6 @@
 <h1>Import</h1>
 
-<form action="{% url 'emailanalysis:submit' %}" method="post">
+<form action="{% url 'emailanalysis:parse' %}" method="post">
 {% csrf_token %}
     <label>Full Email Text</label><br />
     <textarea id="full-text" name="full-text"></textarea>
@@ -9,7 +9,7 @@
 </form>
 
 
-<form action="{% url 'emailanalysis:submit' %}" method="post" enctype="multipart/form-data">
+<form action="{% url 'emailanalysis:parse' %}" method="post" enctype="multipart/form-data">
 {% csrf_token %}
     <input type="file" id="email-file-import" name="email-file">
 
