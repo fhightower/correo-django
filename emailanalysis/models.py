@@ -5,11 +5,15 @@ class Email(models.Model):
     """Database model for handling emails."""
 
     full_text = models.TextField()
+    # TODO: should the entry below be a charfield? also, enable the line below
+    # full_email_id = models.CharField()
     # header = models.TextField()
     # body = models.TextField()
-    # todo: make the recipient email optional (null=True, blank=True)
+    # TODO: make the recipient email optional (null=True, blank=True)
     recipient_email = models.EmailField()
     # recipient_ip = models.GenericIPAddressField()
+    # TODO: enable the line below
+    # reply_to = models.CharField(null=True, blank=True)
     sender_email = models.EmailField()
     sender_ip = models.GenericIPAddressField(null=True, blank=True)
     subject = models.CharField(max_length=500)
