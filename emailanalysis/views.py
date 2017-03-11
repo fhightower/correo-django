@@ -40,22 +40,23 @@ temp_email_data = {
 
 def parse(request):
     try:
+        full_email_text = None
+
         if request.POST.get('full-text'):
             full_email_text = request.POST['full-text']
-
         elif request.FILES.get('email-file'):
-            email_file = request.FILES['email-file']
+            raw_email = request.FILES['email-file'].read()
+            full_email_text = raw_email.decode()
 
-        # full_email_text = request.POST['full-text']
-        # email_subject = request.POST['subject']
-        # recipient_email = request.POST['recipient-email']
-        # sender_email = request.POST['sender-email']
-        # sender_ip_address = request.POST['sender-ip']
-        parsed_email = email.message_from_string(full_email_text)
-        temp_email_data['subject'] = parsed_email.get('subject')
-        temp_email_data['recipient_email'] =  parsed_email.get('to')
-        temp_email_data['sender_email'] = parsed_email.get('from')
-        temp_email_data['sender_ip'] = parsed_email.get('x-originating-ip')
+        if full_email_text is not None:
+            parsed_email = email.message_from_string(full_email_text)
+            temp_email_data['subject'] = parsed_email.get('subject')
+            temp_email_data['recipient_email'] =  parsed_email.get('to')
+            temp_email_data['sender_email'] = parsed_email.get('from')
+            temp_email_data['sender_ip'] = parsed_email.get('x-originating-ip')
+        else:
+            # TODO: log error here
+            pass
     except KeyError as e:
         # Redisplay the question voting form.
         # todo: implement an error message
@@ -72,7 +73,8 @@ def parse(request):
         # return HttpResponseRedirect(reverse('emailanalysis:details', args=(new_email.id,)))
         return HttpResponseRedirect(reverse('emailanalysis:review'))
 
+
 def review(request):
-    """."""
+    """Review view letting users redact information from an email."""
     print("here: {}".format(request))
     return render(request, 'emailanalysis/review.html', temp_email_data)
