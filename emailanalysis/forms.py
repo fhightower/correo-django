@@ -3,11 +3,14 @@ from dropzone.forms import DropzoneInput
 
 
 class ExampleForm(forms.Form):
-    images = forms.FileField(
+    emails = forms.FileField(
         widget=DropzoneInput(dropzone_config={
-            "maxFilesize": 10,
-            # "acceptedFiles": "image/*",
-            "url": '/email/import/upload/',
+            # "autoProcessQueue": False,
+            # todo: add a reasonable max file size
+            "maxFilesize": 100,
+            "maxFiles": 1,
+            "url": '/email/import/parse/',
+            # "uploadMultiple": True,
             "addRemoveLinks": True
         })
     )

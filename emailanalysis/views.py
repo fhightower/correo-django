@@ -1,9 +1,17 @@
+import datetime
+import email
+import json
+
+# todo: do we need this import?
+from django.http import Http404, HttpResponse
+
 from django.core.files import File
+from django.core.files.storage import default_storage
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
-import email
+
 
 from .forms import ExampleForm
 from .models import Email
@@ -65,42 +73,42 @@ def submit(request):
         return HttpResponseRedirect(reverse('emailanalysis:details', args=(new_email.id,)))
 
 
-def submit_file(request):
-    """Handle an email that is uploaded as a file."""
-    redirect_id = 1
-    # todo: figure out why there are two post requests coming in here when uploading a file (I am almost positive it has to do with drop-zone)
-    if request.FILES.get('file'):
-        try:
-            # read the file sent in the POST
-            my_file = File(request.FILES['file'])
-            raw_email = my_file.read()
-        except Exception as e:
-            # handle any errors retrieving the file from the POST
-            # todo: add error message here
-            print(e)
-            # return HttpResponseRedirect(reverse('emailanalysis:details', args=(redirect_id,)))
-        else:
-            # parse and create a new email object
-            try:
-                parsed_email = email.message_from_string(raw_email.decode())
-            except Exception as e:
-                # todo: add error handling here
-                raise e
-            else:
-                subject = parsed_email.get('subject')
-                recipient_email = parsed_email.get('to')
-                sender_email = parsed_email.get('from')
-                sender_ip = parsed_email.get('x-originating-ip')
+# def submit_file(request):
+#     """Handle an email that is uploaded as a file."""
+#     redirect_id = 1
+#     # todo: figure out why there are two post requests coming in here when uploading a file (I am almost positive it has to do with drop-zone)
+#     if request.FILES.get('file'):
+#         try:
+#             # read the file sent in the POST
+#             my_file = File(request.FILES['file'])
+#             raw_email = my_file.read()
+#         except Exception as e:
+#             # handle any errors retrieving the file from the POST
+#             # todo: add error message here
+#             print(e)
+#             # return HttpResponseRedirect(reverse('emailanalysis:details', args=(redirect_id,)))
+#         else:
+#             # parse and create a new email object
+#             try:
+#                 parsed_email = email.message_from_string(raw_email.decode())
+#             except Exception as e:
+#                 # todo: add error handling here
+#                 raise e
+#             else:
+#                 subject = parsed_email.get('subject')
+#                 recipient_email = parsed_email.get('to')
+#                 sender_email = parsed_email.get('from')
+#                 sender_ip = parsed_email.get('x-originating-ip')
 
-                # todo: implement submitter id creation
-                new_email = Email(full_text=raw_email, subject=subject, recipient_email=recipient_email, sender_email=sender_email, sender_ip=sender_ip, submitter="12345678")
-                new_email.save()
-                redirect_id = new_email.id
+#                 # todo: implement submitter id creation
+#                 new_email = Email(full_text=raw_email, subject=subject, recipient_email=recipient_email, sender_email=sender_email, sender_ip=sender_ip, submitter="12345678")
+#                 new_email.save()
+#                 redirect_id = new_email.id
 
-            print(redirect_id)
-            return HttpResponseRedirect(reverse('emailanalysis:details', args=(redirect_id,)))
-    else:
-        return HttpResponse()
+#             print(redirect_id)
+#             return HttpResponseRedirect(reverse('emailanalysis:details', args=(redirect_id,)))
+#     else:
+#         return HttpResponse()
 
 
 # def upload_file(self, request, *args, **kwargs):
@@ -119,37 +127,119 @@ def submit_file(request):
 
 #     return self.render_json_response(response_dict, status=200)
 
-import datetime
-import json
 
-from django.core.files import File
-from django.core.files.storage import default_storage
-from django.http import Http404, HttpResponse
-from django.views.generic import View
-
-
-class UploadView(View):
+class ParseView(generic.View):
     def post(self, request):
         assert len(self.request.FILES) == 1
+        redirect_id = 1
 
         if request.FILES.get('file'):
             try:
                 # read the file sent in the POST
-                tmp_file = File(request.FILES['file'])
-                # raw_email = my_file.read()
-                # print(raw_email)
-                # print(my_file.name)
-
-                with default_storage.open("raw_emails/" + str(datetime.datetime.now()).split(" ")[0] + "-" + tmp_file.name, "wb+") as f:
-                    for chunk in tmp_file.chunks():
-                        f.write(chunk)
-
-                    file_url = default_storage.url(f.name)
-                    print(file_url)
-
-                return HttpResponse(json.dumps({"file_url": file_url}))
+                my_file = File(request.FILES['file'])
+                raw_email = my_file.read()
             except Exception as e:
+                # handle any errors retrieving the file from the POST
+                # todo: add error message here
                 print("Error: {}".format(e))
+                # return HttpResponseRedirect(reverse('emailanalysis:details', args=(redirect_id,)))
+            else:
+                # parse and create a new email object
+                try:
+                    parsed_email = email.message_from_string(raw_email.decode())
+                except Exception as e:
+                    # todo: add error handling here
+                    raise e
+                else:
+                    subject = parsed_email.get('subject')
+                    recipient_email = parsed_email.get('to')
+                    sender_email = parsed_email.get('from')
+                    sender_ip = parsed_email.get('x-originating-ip')
+
+                    # todo: implement submitter id creation
+                    new_email = Email(full_text=raw_email, subject=subject, recipient_email=recipient_email, sender_email=sender_email, sender_ip=sender_ip, submitter="12345678")
+
+                    # new_email.save()
+                    # redirect_id = new_email.id
+
+                return HttpResponseRedirect(reverse('emailanalysis:review', args=({'recipient_email': recipient_email, 'sender_email': sender_email, 'sender_ip': sender_ip})))
+
+            # except Exception as e:
+            #     print("Error: {}".format(e))
+
+def review(subject, recipient_email, sender_email, sender_ip):
+    """."""
+    print(sender_ip)
+    context = {
+        'subject': subject,
+        'recipient_email': recipient_email,
+        'sender_email': sender_email,
+        'sender_ip': sender_ip,
+    }
+
+    return render(request, 'emailanalysis/review.html', context)
+
+
+class UploadView(generic.View):
+    def post(self, request):
+        assert len(self.request.FILES) == 1
+        redirect_id = 1
+
+        if request.FILES.get('file'):
+            try:
+                # read the file sent in the POST
+                my_file = File(request.FILES['file'])
+                raw_email = my_file.read()
+            except Exception as e:
+                # handle any errors retrieving the file from the POST
+                # todo: add error message here
+                print("Error: {}".format(e))
+                # return HttpResponseRedirect(reverse('emailanalysis:details', args=(redirect_id,)))
+            else:
+                # parse and create a new email object
+                try:
+                    parsed_email = email.message_from_string(raw_email.decode())
+                except Exception as e:
+                    # todo: add error handling here
+                    raise e
+                else:
+                    subject = parsed_email.get('subject')
+                    recipient_email = parsed_email.get('to')
+                    sender_email = parsed_email.get('from')
+                    sender_ip = parsed_email.get('x-originating-ip')
+
+                    # todo: implement submitter id creation
+                    new_email = Email(full_text=raw_email, subject=subject, recipient_email=recipient_email, sender_email=sender_email, sender_ip=sender_ip, submitter="12345678")
+                    # new_email.save()
+                    # redirect_id = new_email.id
+
+                return HttpResponseRedirect(reverse('emailanalysis:details', args=(redirect_id,)))
+            # except Exception as e:
+            #     print("Error: {}".format(e))
+
+
+# class UploadView(generic.View):
+#     def post(self, request):
+#         assert len(self.request.FILES) == 1
+
+#         if request.FILES.get('file'):
+#             try:
+#                 # read the file sent in the POST
+#                 tmp_file = File(request.FILES['file'])
+#                 # raw_email = my_file.read()
+#                 # print(raw_email)
+#                 # print(my_file.name)
+
+#                 with default_storage.open("raw_emails/" + str(datetime.datetime.now()).split(" ")[0] + "-" + tmp_file.name, "wb+") as f:
+#                     for chunk in tmp_file.chunks():
+#                         f.write(chunk)
+
+#                     file_url = default_storage.url(f.name)
+#                     print(file_url)
+
+#                 return HttpResponse(json.dumps({"file_url": file_url}))
+#             except Exception as e:
+#                 print("Error: {}".format(e))
 
         # print(self.request.FILES)
         # field_name = my_file.name
