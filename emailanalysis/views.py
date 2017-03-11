@@ -16,8 +16,7 @@ class EmailAnalysisHome(generic.ListView):
         """
         Return the five, most recently updated, emails.
         """
-        # todo: implement this more thoroughly
-        return Email.objects.all()[:5]
+        return Email.objects.all()[ len(Email.objects.all()) - 5:]
 
 
 class EmailDetailView(generic.DetailView):
