@@ -9,7 +9,7 @@ from .models import Email
 
 
 CONFIG = {
-    "detail_view_list_length": 7
+    "index_max_emails_listed": 7
 }
 
 class EmailAnalysisHome(generic.ListView):
@@ -20,7 +20,10 @@ class EmailAnalysisHome(generic.ListView):
         """
         Return the five, most recently updated, emails.
         """
-        return Email.objects.all()[ len(Email.objects.all()) - CONFIG['detail_view_list_length']:]
+        if len(Email.objects.all()) >= CONFIG['index_max_emails_listed']:
+            return Email.objects.all()[ len(Email.objects.all()) - CONFIG['index_max_emails_listed']:]
+        else:
+            return Email.objects.all()
 
 
 class EmailDetailView(generic.DetailView):
