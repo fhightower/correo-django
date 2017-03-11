@@ -78,3 +78,27 @@ def review(request):
     """Review view letting users redact information from an email."""
     print("here: {}".format(request))
     return render(request, 'emailanalysis/review.html', temp_email_data)
+
+
+def save(request):
+    """Save an email."""
+    try:
+        # TODO: When I start storing the emails as files, replace the full_text variable below
+        full_email_text = "This is just a placeholder text"
+        email_subject = request.POST.get('email_subject')
+        recipient_email = request.POST.get('email_subject')
+        sender_email = request.POST.get('sender_email')
+        sender_ip = request.POST.get('sender_ip')
+    except KeyError as e:
+        # Redisplay the question voting form.
+        # todo: implement an error message
+        # return render(request, 'polls/detail.html', {
+        #     'question': question,
+        #     'error_message': "You didn't select a choice.",
+        # })
+        print("Error: {}".format(e))
+    else:
+        new_email = Email(full_text=full_email_text, subject=email_subject, recipient_email=recipient_email, sender_email=sender_email, sender_ip=sender_ip, submitter="12345678")
+        new_email.save()
+        return HttpResponseRedirect(reverse('emailanalysis:details', args=(new_email.id,)))
+        # return HttpResponseRedirect(reverse('emailanalysis:review'))
