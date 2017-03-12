@@ -92,7 +92,6 @@ def parse(request):
 
 def review(request):
     """Review view letting users redact information from an email."""
-    print("here: {}".format(request))
     return render(request, 'emailanalysis/review.html', temp_email_data)
 
 
@@ -102,7 +101,7 @@ def save(request):
         # TODO: When I start storing the emails as files, replace the full_text variable below
         full_email_text = "This is just a placeholder text"
         email_subject = request.POST.get('email_subject')
-        recipient_email = request.POST.get('email_subject')
+        recipient_email = request.POST.get('recipient_email')
         sender_email = request.POST.get('sender_email')
         sender_ip = request.POST.get('sender_ip')
     except KeyError as e:
