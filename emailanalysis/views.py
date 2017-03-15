@@ -5,7 +5,9 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 
-from .models import Email
+from .models import Email, Host, IPAddress, Url
+
+from .utility import indicator_parser
 
 
 CONFIG = {
@@ -37,6 +39,9 @@ def import_(request):
 # TODO: this is a temporary hack to get data from the parse view to the review view. In the future, parse out all of the details from the email as done below, render an html page which then submits a get request to the review view with all of the pertinent information
 
 temp_email_data = {
+    'parsed_hosts': list(),
+    'parsed_ip_addresses': list(),
+    'parsed_urls': list(),
     'subject': None,
     'recipient_email': None,
     'sender_email': None,
@@ -70,6 +75,13 @@ def parse(request):
             temp_email_data['reply_to'] = parsed_email.get('reply-to')
             temp_email_data['sender_email'] = parsed_email.get('from')
             temp_email_data['sender_ip'] = parsed_email.get('x-originating-ip')
+
+            # TODO: validate that it is a good assumption that the first section of the payload will be the main body
+            parser = indicator_parser.IndicatorParser(str(parsed_email.get_payload()[0]))
+            results = parser.parse_indicators()
+            temp_email_data['parsed_hosts'] = results['hosts']
+            temp_email_data['parsed_ip_addresses'] = results['ip_addresses']
+            temp_email_data['parsed_urls'] = results['urls']
         else:
             # TODO: log error here
             pass
