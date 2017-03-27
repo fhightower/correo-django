@@ -48,15 +48,6 @@ temp_email_data = {
     'sender_ip': None
 }
 
-# temp_email_data = {
-#     "this_email": {
-#         'subject': None,
-#         'recipient_email': None,
-#         'sender_email': None,
-#         'sender_ip': None
-#     }
-# }
-
 
 def parse(request):
     try:
@@ -87,18 +78,13 @@ def parse(request):
             pass
     except KeyError as e:
         # Redisplay the question voting form.
-        # todo: implement an error message
+        # TODO: implement an error message
         # return render(request, 'polls/detail.html', {
         #     'question': question,
         #     'error_message': "You didn't select a choice.",
         # })
         print("Error: {}".format(e))
     else:
-        # email_file = request.FILES.get('file')
-        # print(email_file)
-        # new_email = Email(full_text=full_email_text, subject=email_subject, recipient_email=recipient_email, sender_email=sender_email, sender_ip=sender_ip_address, submitter="12345678")
-        # new_email.save()
-        # return HttpResponseRedirect(reverse('emailanalysis:details', args=(new_email.id,)))
         return HttpResponseRedirect(reverse('emailanalysis:review'))
 
 
@@ -118,7 +104,7 @@ def save(request):
         sender_ip = request.POST.get('sender_ip')
     except KeyError as e:
         # Redisplay the question voting form.
-        # todo: implement an error message
+        # TODO: implement an error message
         # return render(request, 'polls/detail.html', {
         #     'question': question,
         #     'error_message': "You didn't select a choice.",
@@ -128,4 +114,3 @@ def save(request):
         new_email = Email(full_text=full_email_text, subject=email_subject, recipient_email=recipient_email, sender_email=sender_email, sender_ip=sender_ip, submitter="12345678")
         new_email.save()
         return HttpResponseRedirect(reverse('emailanalysis:details', args=(new_email.id,)))
-        # return HttpResponseRedirect(reverse('emailanalysis:review'))
