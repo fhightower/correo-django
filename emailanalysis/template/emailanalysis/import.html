@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% load static %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'emailanalysis/dropzone.css' %}" />
@@ -7,29 +8,22 @@
 <h1>Upload</h1>
 
 <!-- <form action="{% url 'emailanalysis:submit' %}" method="post">
+=======
+<h1>Import</h1>
+
+<form action="{% url 'emailanalysis:parse' %}" method="post">
+>>>>>>> simple_email_upload
 {% csrf_token %}
     <label>Full Email Text</label><br />
     <textarea id="full-text" name="full-text"></textarea>
 
-    <br /><br />
+    <input type="submit" value="Upload" />
+</form>
 
-    <label>Email Subject</label><br />
-    <input id="subject" name="subject"></input>
 
-    <br /><br />
-
-    <label>Recipient Email Address</label><br />
-    <input id="recipient-email" name="recipient-email" type="email"></input>
-
-    <br /><br />
-
-    <label>Sender Email Address</label><br />
-    <input id="sender-email" name="sender-email" type="email"></input>
-
-    <br /><br />
-
-    <label>Sender IP Address</label><br />
-    <input id="sender-ip" name="sender-ip"></input>
+<form action="{% url 'emailanalysis:parse' %}" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+    <input type="file" id="email-file-import" name="email-file">
 
     <br /><br />
 
