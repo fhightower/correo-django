@@ -1,0 +1,47 @@
+<h1>Review:</h1>
+{% if subject %}
+    <form action="{% url 'emailanalysis:save' %}" method="post">
+    {% csrf_token %}
+        <label>Subject</label><input type="text" name="email_subject" value="{{ subject }}">
+        <br>
+        <label>Recipient Email Address</label><input type="text" name="recipient_email" value="{{ recipient_email }}">
+        <br>
+        <label>Sender Email Address</label><input type="text" name="sender_email" value="{{ sender_email }}">
+        <br>
+        <label>Sender IP</label><input type="text" name="sender_ip" value="{{ sender_ip }}">
+
+        <br>
+
+        <label>Hosts</label>
+        <ul>
+        {% for host in parsed_hosts %}
+            <li>{{ host }}</li>
+        {% endfor %}
+        </ul>
+
+        <br>
+
+
+        <label>IP Addresses</label>
+        <ul>
+        {% for ip_address in parsed_ip_addresses %}
+            <li>{{ ip_address }}</li>
+        {% endfor %}
+        </ul>
+
+        <br>
+
+        <label>URLs</label>
+        <ul>
+        {% for url in parsed_urls %}
+            <li>{{ url }}</li>
+        {% endfor %}
+        </ul>
+
+        <br><br>
+
+        <input type="submit" value="Upload" />
+    </form>
+{% else %}
+    <p>No email available.</p>
+{% endif %}

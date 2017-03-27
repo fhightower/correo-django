@@ -1,18 +1,6 @@
-<<<<<<< HEAD
-{% load static %}
-
-<link rel="stylesheet" type="text/css" href="{% static 'emailanalysis/dropzone.css' %}" />
-<script type="text/javascript" src="{% static 'emailanalysis/dropzone.js' %}"></script>
-<script type="text/javascript" src="{% static 'emailanalysis/jquery.js' %}"></script>
-
-<h1>Upload</h1>
-
-<!-- <form action="{% url 'emailanalysis:submit' %}" method="post">
-=======
 <h1>Import</h1>
 
 <form action="{% url 'emailanalysis:parse' %}" method="post">
->>>>>>> simple_email_upload
 {% csrf_token %}
     <label>Full Email Text</label><br />
     <textarea id="full-text" name="full-text"></textarea>
@@ -28,17 +16,6 @@
     <br /><br />
 
     <input type="submit" value="Upload" />
-</form>->
-
-<!--<form id="my-dropzone" action="{% url 'emailanalysis:submit_file' %}" method="post" class="dropzone" name="email-file">{% csrf_token %}</form>
-<button id="submit-all">Submit all files</button>-->
-
-<form id="my-awesome-dropzone" class="dropzone" action="{% url 'emailanalysis:submit_file' %}" method="post" enctype="multipart/form-data" name="email-file">
-{% csrf_token %}
-  <div class="dropzone-previews"></div> <!-- this is were the previews should be shown. -->
-  <button type="submit">Submit data and files!</button>
 </form>
 
 <a href="{% url 'emailanalysis:index' %}">< Return to email analysis page</a>
-
-<script type="text/javascript" src="{% static 'emailanalysis/dropTest.js' %}"></script>
