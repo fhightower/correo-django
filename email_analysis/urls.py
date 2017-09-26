@@ -5,7 +5,7 @@ from . import views
 app_name = 'email_analysis'
 urlpatterns = [
     url(r'^$', views.EmailAnalysisHome.as_view(), name='index'),
-    url(r'^import/$', views.import_, name='import'),
+    url(r'^import/$', views.ImportView.as_view(), name='import'),
     # url(r'^import/parse$', views.parse, name='parse'),
     url(r'^import/review$', views.review, name='review'),
     url(r'^import/save$', views.save, name='save'),
