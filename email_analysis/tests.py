@@ -7,7 +7,7 @@ from django.test import TestCase
 from .models import Email, Host, IPAddress, Url
 
 test_email_file_path = os.path.join(os.getcwd(),
-                                    "test_emails/PLEASE KINDLY READ.eml")
+                                    "test_resources/test.eml")
 DEFAULT_FULL_TEXT = None
 DEFAULT_HOSTNAME = "test.com"
 DEFAULT_IP_ADDRESS = "0.0.0.0"

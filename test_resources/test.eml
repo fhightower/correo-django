@@ -1,0 +1,162 @@
+Delivered-To: 11hurdj@gmail.com
+Received: by 10.74.51.193 with SMTP id q184csp3395227ooq;
+        Fri, 22 Sep 2017 09:34:39 -0700 (PDT)
+X-Received: by 10.159.36.80 with SMTP id 74mr5857287uaq.8.1506098079653;
+        Fri, 22 Sep 2017 09:34:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1506098079; cv=none;
+        d=google.com; s=arc-20160816;
+        b=MJ9jytWE7DAX4oJrzBkSzMmhhMaQIC5XnbkHJsp3XlK+KzVBKbZFa5YlqjWiz52XGM
+         CTiieUIUulgWgGhraLsHod06Asebxu6U6Qvyky1BOHC3zoS1nzRWnqgDRmgjmMOajq3P
+         3UmrgOG9JEcetQaRake5D5EUiNZXd2ZsSUv+XOc84DEQqKMaPXadgjBWZ3RxOs7bVZDL
+         M4+xMyP+XkWb7cmmuxNIaCIZlk2TfAzoBaT66QFLB2980hzFjqitlGl8K1tVG3N3tURI
+         67WUSSVbjY9cJotN/VBZutIt4VwLI2FQMS0nw0c4+ADmi1IyI68JgkhBWzgkVi749xvf
+         0lWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature
+         :arc-authentication-results;
+        bh=mAUpCaSe+vbbnDcyjU0uKhavQehovNdsGPYmjdtWzGc=;
+        b=cT/C04/juxsr9HkE3cRkQ10v//lz+mrykcKQLa2w/vFVKPy28/fhd33FIiuS4mUIz0
+         Ozch5aVw0mPbEHCCHhQLH0+3rug9dnft68SC4SjW0IZRGN01rKYXNPxzE1VjgYP/APCv
+         I3Oh7VIp7Q3XtlMBQPyy8WgKRwJOC8zyRYNScB7l73VBl7axfkETaH8NG4W9eaW57xX2
+         l+iX2sr2rZNU7TaEfzWq//vz+n4jWirglOg/XUhDG1mqJxzRaPTI5D8dXPkmK3KthNAN
+         yEQk5limMPkdP4+1USCNqfWD3ijIuzfU6YyyDBPwz0Sgoj53eH7mnqUGae7DAV+0BKWY
+         94Iw==
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@threatconnect.com header.s=google header.b=kGkjEtLv;
+       spf=pass (google.com: domain of jhurd@threatconnect.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=jhurd@threatconnect.com;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=threatconnect.com
+Return-Path: <jhurd@threatconnect.com>
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])
+        by mx.google.com with SMTPS id c92sor105637uac.93.2017.09.22.09.34.39
+        for <11hurdj@gmail.com>
+        (Google Transport Security);
+        Fri, 22 Sep 2017 09:34:39 -0700 (PDT)
+Received-SPF: pass (google.com: domain of jhurd@threatconnect.com designates 209.85.220.41 as permitted sender) client-ip=209.85.220.41;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@threatconnect.com header.s=google header.b=kGkjEtLv;
+       spf=pass (google.com: domain of jhurd@threatconnect.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=jhurd@threatconnect.com;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=threatconnect.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=threatconnect.com; s=google;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=mAUpCaSe+vbbnDcyjU0uKhavQehovNdsGPYmjdtWzGc=;
+        b=kGkjEtLvhPrikNDl2sAHOl0iOFRC/0mLObr5R6xwy9Ciq7Ovh7348R0ws2KnRqL7J3
+         NJaI2mFgPnVfcOvsuoyfebHFWT86OlPmzHXS7nmH9t0Ywhw5YjABjcSHNErxhQ73mB2d
+         ipGlTTeotzB+4aN5OAnUsYD8tcKbaClEpSOZM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=mAUpCaSe+vbbnDcyjU0uKhavQehovNdsGPYmjdtWzGc=;
+        b=Dsm3C5mJaCxbU70NRgaR0Qg56U3Zxq9Pk/VoW1RiviTVvNtSGNEM5p/iW4NMZ/cklh
+         /Eu2SVtUvci1Q6XxmDccmT4XvwHMiZubou4VsVqLMWKt2tkUywyMd1omugxRnKGY7fbl
+         1omiPmLSnzonpuQLyDWJ5a4uHKNW//o2MKDtOMQtTJidjdujOJMOmLUVPRXn+uwt6V2q
+         aNsnXO15fVG19N1UgC5RBi3SmTGZ5Tgtlk5dHb11XFkFNUZrLySLnajT2+CqiSSfGMKq
+         PFP7dJAWD6LVpxuHMm1qO8dzf60mMHRtwVI6pFJO32vKqLL9y2sEmIpgifaf6fNKqQl0
+         RAKA==
+X-Gm-Message-State: AHPjjUhr3gmuo7dZkRx9SfFP5YL3siWGeoLMS1ClhB4lJQ6RQJqpJqVN
+	qCuTbyfxCBkwxaYYy75+skOwZ6zBOMyZkdJ1wtcRDwGC
+X-Google-Smtp-Source: AOwi7QDgBBfdrAJrrU4IFx+kyXYXA3IzDFcG8wn5/TiRi65/s8QCEusbIg9ADBO9G/wtmy1S6ayFBTelCaY9oy52Vgk=
+X-Received: by 10.159.62.198 with SMTP id n6mr6151401uaj.149.1506098078892;
+ Fri, 22 Sep 2017 09:34:38 -0700 (PDT)
+MIME-Version: 1.0
+From: John Hurd <jhurd@threatconnect.com>
+Date: Fri, 22 Sep 2017 16:34:28 +0000
+Message-ID: <CAGqF7ggTiUQ71nY7qfsG3Lj-BZJKz6=5pVdzoOw8ekogfGahrQ@mail.gmail.com>
+Subject: consider adding to python project template
+To: 11hurdj <11hurdj@gmail.com>
+Content-Type: multipart/alternative; boundary="089e08206ffcfd6ce90559c9c8aa"
+
+--089e08206ffcfd6ce90559c9c8aa
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+https://github.com/StylishThemes/GitHub-Dark/blob/master/tools/authors.sh
+--=20
+
+*John Hurd*
+
+Threat Intelligence Research Engineer
+
+ThreatConnect=C2=AE
+
+703.229.4240 (MAIN)
+
+703.229.4489 (FAX)
+
+jhurd@threatconnect.com | www.threatconnect.com
+
+<http://www.threatconnect.com/>
+
+--089e08206ffcfd6ce90559c9c8aa
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><a rel=3D"nofollow" target=3D"_blank" href=3D"https://gith=
+ub.com/StylishThemes/GitHub-Dark/blob/master/tools/authors.sh" style=3D"col=
+or:rgb(102,17,204);font-family:&quot;Roboto Slab&quot;,&quot;Times New Roma=
+n&quot;,serif;font-size:14px;font-variant-ligatures:none;white-space:pre-wr=
+ap;background-color:rgb(250,250,250)">https://github.com/StylishThemes/GitH=
+ub-Dark/blob/master/tools/authors.sh</a><br></div><div dir=3D"ltr">-- <br><=
+/div><div class=3D"gmail_signature" data-smartmail=3D"gmail_signature"><div=
+ dir=3D"ltr"><span><p style=3D"font-size:12.8px;font-style:normal;font-vari=
+ant-ligatures:normal;font-variant-caps:normal;font-weight:normal;letter-spa=
+cing:normal;line-height:normal;text-align:start;text-indent:0px;text-transf=
+orm:none;white-space:normal;word-spacing:0px;margin:0in 0in 0.0001pt;font-f=
+amily:calibri,sans-serif;color:rgb(0,0,0);background-color:rgb(255,255,255)=
+"><b><span style=3D"font-family:&quot;century gothic&quot;,sans-serif;color=
+:rgb(237,125,49)"><font size=3D"2">John Hurd<u></u><u></u></font></span></b=
+></p><p style=3D"color:rgb(34,34,34);font-family:arial,sans-serif;font-size=
+:12.8px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:n=
+ormal;font-weight:normal;letter-spacing:normal;line-height:normal;text-alig=
+n:start;text-indent:0px;text-transform:none;white-space:normal;word-spacing=
+:0px;margin:0in 0in 0.0001pt;background-color:rgb(255,255,255)"><font color=
+=3D"#808080" face=3D"Century Gothic, sans-serif" size=3D"2">Threat Intellig=
+ence Research Engineer</font></p><p style=3D"font-size:12.8px;font-style:no=
+rmal;font-variant-ligatures:normal;font-variant-caps:normal;font-weight:nor=
+mal;letter-spacing:normal;line-height:normal;text-align:start;text-indent:0=
+px;text-transform:none;white-space:normal;word-spacing:0px;margin:0in 0in 0=
+.0001pt;font-family:calibri,sans-serif;color:rgb(0,0,0);background-color:rg=
+b(255,255,255)"><font size=3D"2"><span style=3D"font-family:&quot;century g=
+othic&quot;,sans-serif;color:rgb(237,125,49)">ThreatConnect</span><span sty=
+le=3D"font-family:&quot;century gothic&quot;,sans-serif;color:rgb(237,125,4=
+9);background-image:initial;background-repeat:initial">=C2=AE</span><span s=
+tyle=3D"font-family:&quot;century gothic&quot;,sans-serif;color:rgb(37,37,3=
+7);background-image:initial;background-repeat:initial">=C2=A0</span></font>=
+</p><p style=3D"font-size:12.8px;font-style:normal;font-variant-ligatures:n=
+ormal;font-variant-caps:normal;font-weight:normal;letter-spacing:normal;lin=
+e-height:normal;text-align:start;text-indent:0px;text-transform:none;white-=
+space:normal;word-spacing:0px;margin:0in 0in 0.0001pt;font-family:calibri,s=
+ans-serif;color:rgb(0,0,0);background-color:rgb(255,255,255)"><span style=
+=3D"font-family:&quot;century gothic&quot;,sans-serif;color:gray"><font siz=
+e=3D"2"><a value=3D"+17032294240" style=3D"color:rgb(17,85,204)">703.229.42=
+40</a>=C2=A0(MAIN)<u></u><u></u></font></span></p><p style=3D"font-size:12.=
+8px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:norma=
+l;font-weight:normal;letter-spacing:normal;line-height:normal;text-align:st=
+art;text-indent:0px;text-transform:none;white-space:normal;word-spacing:0px=
+;margin:0in 0in 0.0001pt;font-family:calibri,sans-serif;color:rgb(0,0,0);ba=
+ckground-color:rgb(255,255,255)"><a value=3D"+17032294240" style=3D"font-fa=
+mily:&quot;century gothic&quot;,sans-serif;font-size:small;color:rgb(17,85,=
+204)">703.229.4489</a><span style=3D"color:rgb(128,128,128);font-family:&qu=
+ot;century gothic&quot;,sans-serif;font-size:small">=C2=A0(FAX)</span></p><=
+p style=3D"font-size:12.8px;font-style:normal;font-variant-ligatures:normal=
+;font-variant-caps:normal;font-weight:normal;letter-spacing:normal;line-hei=
+ght:normal;text-align:start;text-indent:0px;text-transform:none;white-space=
+:normal;word-spacing:0px;margin:0in 0in 0.0001pt;font-family:calibri,sans-s=
+erif;color:rgb(0,0,0);background-color:rgb(255,255,255)"><font size=3D"2"><=
+span style=3D"font-family:&quot;century gothic&quot;,sans-serif"><a href=3D=
+"mailto:jhurd@threatconnect.com" style=3D"color:rgb(17,85,204)">jhurd@threa=
+tconnect.com</a>=C2=A0</span><span style=3D"font-family:&quot;century gothi=
+c&quot;,sans-serif;color:gray;background-image:initial;background-repeat:in=
+itial">|</span><span style=3D"font-family:&quot;century gothic&quot;,sans-s=
+erif;color:gray">=C2=A0</span><span style=3D"font-family:&quot;century goth=
+ic&quot;,sans-serif"><a href=3D"http://www.threatconnect.com/" style=3D"col=
+or:rgb(17,85,204)">www.threatconnect.com</a></span></font></p><p style=3D"c=
+olor:rgb(34,34,34);font-family:arial,sans-serif;font-size:12.8px;font-style=
+:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-weight:=
+normal;letter-spacing:normal;line-height:normal;text-align:start;text-inden=
+t:0px;text-transform:none;white-space:normal;word-spacing:0px;background-co=
+lor:rgb(255,255,255)"><a href=3D"http://www.threatconnect.com/"><img src=3D=
+"http://www.threatconnect.com/signatures/ThreatConnect-Logo.jpg"></a></p></=
+span></div></div>
+
+--089e08206ffcfd6ce90559c9c8aa--
