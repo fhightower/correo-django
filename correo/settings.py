@@ -55,7 +55,7 @@ ROOT_URLCONF = 'correo.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['email_analysis/template'],
+        'DIRS': ['email_analysis/template', 'correo/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
