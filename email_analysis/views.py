@@ -16,7 +16,7 @@ CONFIG = {
 }
 
 class EmailAnalysisHome(generic.ListView):
-    template_name = "emailanalysis/index.html"
+    template_name = "email_analysis/index.html"
     context_object_name = 'recent_emails'
 
     def get_queryset(self):
@@ -31,11 +31,11 @@ class EmailAnalysisHome(generic.ListView):
 
 class EmailDetailView(generic.DetailView):
     model = Email
-    template_name = "emailanalysis/email-details.html"
+    template_name = "email_analysis/email-details.html"
 
 
 def import_(request):
-    return render(request, 'emailanalysis/import.html')
+    return render(request, 'email_analysis/import.html')
 
 # TODO: this is a temporary hack to get data from the parse view to the review view. In the future, parse out all of the details from the email as done below, render an html page which then submits a get request to the review view with all of the pertinent information
 
@@ -50,7 +50,8 @@ temp_email_data = {
 }
 
 
-def parse(request):
+def review(request):
+    """Review view letting users redact information from an email."""
     try:
         full_email_text = None
 
@@ -86,12 +87,9 @@ def parse(request):
         # })
         print("Error: {}".format(e))
     else:
-        return HttpResponseRedirect(reverse('emailanalysis:review'))
-
-
-def review(request):
-    """Review view letting users redact information from an email."""
-    return render(request, 'emailanalysis/review.html', temp_email_data)
+        print("subject: " + temp_email_data['subject'])
+        return render(request, 'email_analysis/review.html', temp_email_data)
+        # return HttpResponseRedirect(reverse('email_analysis:review', ))
 
 
 def save(request):
@@ -114,7 +112,7 @@ def save(request):
     else:
         new_email = Email(full_text=full_email_text, subject=email_subject, recipient_email=recipient_email, sender_email=sender_email, sender_ip=sender_ip, submitter="12345678")
         new_email.save()
-        return HttpResponseRedirect(reverse('emailanalysis:details', args=(new_email.id,)))
+        return HttpResponseRedirect(reverse('email_analysis:details', args=(new_email.id,)))
 
 
 def submit_file(request):
@@ -130,7 +128,7 @@ def submit_file(request):
             # handle any errors retrieving the file from the POST
             # todo: add error message here
             print(e)
-            # return HttpResponseRedirect(reverse('emailanalysis:details', args=(redirect_id,)))
+            # return HttpResponseRedirect(reverse('email_analysis:details', args=(redirect_id,)))
         else:
             # parse and create a new email object
             try:
@@ -150,7 +148,7 @@ def submit_file(request):
                 redirect_id = new_email.id
 
             print(redirect_id)
-            return HttpResponseRedirect(reverse('emailanalysis:details', args=(redirect_id,)))
+            return HttpResponseRedirect(reverse('email_analysis:details', args=(redirect_id,)))
     else:
         return HttpResponse()
 

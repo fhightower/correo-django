@@ -1,6 +1,6 @@
 <h1>Review:</h1>
 {% if subject %}
-    <form action="{% url 'emailanalysis:save' %}" method="post">
+    <form action="{% url 'email_analysis:save' %}" method="post">
     {% csrf_token %}
         <label>Subject</label><input type="text" name="email_subject" value="{{ subject }}">
         <br>

@@ -1,0 +1,18 @@
+<h1>Recent Emails:</h1>
+{% if recent_emails %}
+    <ul>
+    {% for email in recent_emails %}
+        <li><a href="{% url 'email_analysis:details' email.id %}">{{ email.subject }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No emails are available.</p>
+{% endif %}
+
+<div>
+    <a href="{% url 'email_analysis:import' %}">Click here to upload an email</a>
+</div>
+
+<div>
+    < Return to the home page
+</div>
