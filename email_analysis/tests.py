@@ -198,16 +198,10 @@ class ViewTests(TestCase):
 
     def test_parse_view(self):
         """Test the parse view."""
-        response = self.client.post('/email/import/parse', {
+        response = self.client.post('/email/import/review', {
             'full-text': DEFAULT_FULL_TEXT
         })
-        # make sure that the parser is redirecting to the review step
-        self.assertEqual(response.url, "/email/import/review")
-
-    def test_review_view(self):
-        """Test the review view."""
-        # TODO: make this test more robust (currently it only tests to make sure that the review view is available)
-        response = self.client.get('/email/import/review')
+        # make sure that the post works
         self.assertEqual(response.status_code, 200)
 
     def test_save_view(self):
