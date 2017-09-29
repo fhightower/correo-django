@@ -23,7 +23,7 @@ class EmailAnalysisHome(generic.ListView):
         Return the five, most recently updated, emails.
         """
         if len(Email.objects.all()) >= CONFIG['index_max_emails_listed']:
-            return Email.objects.all()[ len(Email.objects.all()) - CONFIG['index_max_emails_listed']:]
+            return Email.objects.all()[ len(Email.objects.all()) - CONFIG['index_max_emails_listed']:].reverse()
         else:
             return Email.objects.all()
 
@@ -101,4 +101,36 @@ def save(request):
     else:
         new_email = Email(full_text=full_email_text, subject=email_subject, recipient_email=recipient_email, sender_email=sender_email, sender_ip=sender_ip, submitter="12345678")
         new_email.save()
+
+        # pull all of the hosts, ips, and urls out of the post statement
+        for entry in request.POST:
+            if entry.startswith("host-"):
+                # create a host
+                new_host = Host(host_name=entry[5:], source="b")
+                new_host.save()
+                new_host.emails.add(new_email)
+            elif entry.startswith("ip-"):
+                # create an ip addressa
+                new_ip = IPAddress(ip_address=entry[3:])
+                new_ip.save()
+                new_ip.emails.add(new_email)
+            elif entry.startswith("url-"):
+                # create a url
+                # TODO: parse query strings, url path, and host name out of the URL more robustly (2)
+                url = entry[4:]
+                url_path = entry[4:].split("/")[1]
+                host = entry[4:].split("/")[0]
+                print("host: {}".format(host))
+                url_host_name = Host(host_name=host, source="b")
+                url_host_name.save()
+                url_host_name.emails.add(new_email)
+
+                new_url = Url(url=url, host=url_host_name)
+
+                if url_path is not None:
+                    new_url.url_path = url_path
+
+                new_url.save()
+                new_url.emails.add(new_email)
+
         return HttpResponseRedirect(reverse('email_analysis:details', args=(new_email.id,)))

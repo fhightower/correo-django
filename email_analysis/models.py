@@ -39,10 +39,10 @@ class Host(models.Model):
     """Host class for the hosts' table."""
 
     host_source_choices = (
-        ("B", "Email Body"),
-        ("R", "Recipient email address"),
-        ("S", "Sender email address"),
-        ("U", "From URL"),
+        ("b", "Email Body"),
+        ("r", "Recipient email address"),
+        ("s", "Sender email address"),
+        ("u", "From URL"),
     )
 
     # todo: add more stuff here...

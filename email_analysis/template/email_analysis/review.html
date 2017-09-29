@@ -15,7 +15,7 @@
         <label>Hosts</label>
         <ul>
         {% for host in parsed_hosts %}
-            <li>{{ host }}</li>
+            <li><input type="text" name="host-{{ host }}" value="{{ host }}"></li>
         {% endfor %}
         </ul>
 
@@ -25,7 +25,7 @@
         <label>IP Addresses</label>
         <ul>
         {% for ip_address in parsed_ip_addresses %}
-            <li>{{ ip_address }}</li>
+            <li><input type="text" name="ip-{{ ip_address }}" value="{{ ip_address }}"></li>
         {% endfor %}
         </ul>
 
@@ -34,7 +34,7 @@
         <label>URLs</label>
         <ul>
         {% for url_ in parsed_urls %}
-            <li>{{ url_ }}</li>
+            <li><input type="text" name="url-{{ url_ }}" value="{{ url_ }}"></li>
         {% endfor %}
         </ul>
 
