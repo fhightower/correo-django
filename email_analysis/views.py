@@ -10,7 +10,7 @@ from .utility import indicator_parser
 from .db_utility import DBEntityCreator
 
 CONFIG = {
-    "index_max_emails_listed": 7
+    "index_max_emails_listed": 10
 }
 
 
@@ -23,9 +23,17 @@ class EmailAnalysisHome(generic.ListView):
         Return the five, most recently updated, emails.
         """
         if len(Email.objects.all()) >= CONFIG['index_max_emails_listed']:
-            return Email.objects.all()[ len(Email.objects.all()) - CONFIG['index_max_emails_listed']:].reverse()
+            # get the most recent emails
+            email_list = Email.objects.all()[len(Email.objects.all()) - CONFIG['index_max_emails_listed']:]
         else:
-            return Email.objects.all()
+            # get all of the emails
+            email_list = Email.objects.all()
+
+        # create a list of the most recent emails
+        email_list = [email for email in email_list]
+        # reverse the list of recent emails
+        email_list.reverse()
+        return email_list
 
 
 class EmailDetailView(generic.DetailView):
