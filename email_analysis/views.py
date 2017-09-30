@@ -14,7 +14,7 @@ CONFIG = {
 }
 
 
-class EmailAnalysisHome(generic.ListView):
+class EmailAnalysisIndex(generic.ListView):
     template_name = "email_analysis/index.html"
     context_object_name = 'recent_emails'
 
