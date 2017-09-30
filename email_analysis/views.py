@@ -101,4 +101,9 @@ def save(request):
         # })
         print("Error: {}".format(e))
     else:
-        return HttpResponseRedirect(reverse('email_analysis:details', args=(entity_creator.email.id,)))
+        # if the email already exists, entity_creator.email is a dict
+        if entity_creator.email_exists:
+            return HttpResponseRedirect(reverse('email_analysis:details', args=(entity_creator.email['id'],)))
+        # if the email does not exist, entity_creator.email is an Email object
+        else:
+            return HttpResponseRedirect(reverse('email_analysis:details', args=(entity_creator.email.id,)))

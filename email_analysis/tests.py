@@ -5,7 +5,7 @@ import os
 from django.test import TestCase
 
 from .models import Email, Host, IPAddress, Url
-from .db_utility import find_email_id
+from .db_utility import create_email_id
 
 test_email_file_path = os.path.join(os.getcwd(),
                                     "test_resources/test.eml")
@@ -23,6 +23,8 @@ with open(test_email_file_path, 'r') as f:
     DEFAULT_FULL_TEXT = f.read()
     f.close()
 
+DEFAULT_EMAIL_ID = create_email_id(DEFAULT_FULL_TEXT)
+
 # dict formatted as it is when posted to the review view
 # EMAIL_DICT = {
 #     'subject': 
@@ -31,7 +33,7 @@ with open(test_email_file_path, 'r') as f:
 
 def create_email():
     """Create a testing email."""
-    email_hash = find_email_id(DEFAULT_FULL_TEXT)
+    email_hash = create_email_id(DEFAULT_FULL_TEXT)
     # TODO: tune the tests to use the db_utility.py (2)
     return Email.objects.create(full_text=DEFAULT_FULL_TEXT,
                                 subject=DEFAULT_SUBJECT,
@@ -214,13 +216,14 @@ class ViewTests(TestCase):
     def test_save_view(self):
         """Test the save view."""
         response = self.client.post('/email/import/save', {
+            'full_text': DEFAULT_FULL_TEXT,
             'email_subject': DEFAULT_SUBJECT,
             'recipient_email': DEFAULT_RECIPIENT,
             'sender_email': DEFAULT_SENDER_EMAIL,
             'sender_ip': DEFAULT_SENDER_IP
         })
         # ensure email created and system redirects to new email
-        self.assertEqual(response.url, "/email/1f45b7ea14c4ae6efc872b68fdc4eded/")
+        self.assertEqual(response.url, "/email/{}/".format(DEFAULT_EMAIL_ID))
 
     def test_email_details_view(self):
         """Test the email details view."""
