@@ -2,7 +2,14 @@
 # -*- coding: utf-8 -*-
 """Utility class to create entities in the database."""
 
+import hashlib
+
 from .models import Email, Host, IPAddress, Url
+
+
+def find_email_id(email_body):
+    """Find the hash of the given email_body."""
+    return hashlib.md5(email_body.encode('utf-8')).hexdigest()
 
 
 class DBEntityCreator():
@@ -22,8 +29,9 @@ class DBEntityCreator():
         recipient_email = self.post_content.get('recipient_email')
         sender_email = self.post_content.get('sender_email')
         sender_ip = self.post_content.get('sender_ip')
+        email_id = find_email_id(full_email_text)
 
-        new_email = Email(full_text=full_email_text, subject=email_subject, recipient_email=recipient_email, sender_email=sender_email, sender_ip=sender_ip, submitter="12345678")
+        new_email = Email(full_text=full_email_text, subject=email_subject, recipient_email=recipient_email, sender_email=sender_email, sender_ip=sender_ip, submitter="12345678", id=email_id)
         new_email.save()
 
         self.email = new_email

@@ -9,5 +9,5 @@ urlpatterns = [
     # url(r'^import/parse$', views.parse, name='parse'),
     url(r'^import/review$', views.review, name='review'),
     url(r'^import/save$', views.save, name='save'),
-    url(r'^(?P<pk>[0-9]+)/$', views.EmailDetailView.as_view(), name='details'),
+    url(r'^(?P<pk>[0-9a-z]{32})/$', views.EmailDetailView.as_view(), name='details'),
 ]

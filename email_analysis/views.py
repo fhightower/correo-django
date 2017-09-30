@@ -84,7 +84,6 @@ def review(request):
         # })
         print("Error: {}".format(e))
     else:
-        print("subject: " + temp_email_data['subject'])
         return render(request, 'email_analysis/review.html', temp_email_data)
         # return HttpResponseRedirect(reverse('email_analysis:review', ))
 

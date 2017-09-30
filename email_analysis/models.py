@@ -19,6 +19,7 @@ class Email(models.Model):
     subject = models.CharField(max_length=500)
     submission_date = models.DateTimeField(auto_now_add=True)
     submitter = models.CharField(max_length=8)
+    id = models.CharField(max_length=32, primary_key=True)
 
     def __str__(self):
         return str(self.id)

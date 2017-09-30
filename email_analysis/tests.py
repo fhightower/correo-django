@@ -5,6 +5,7 @@ import os
 from django.test import TestCase
 
 from .models import Email, Host, IPAddress, Url
+from .db_utility import find_email_id
 
 test_email_file_path = os.path.join(os.getcwd(),
                                     "test_resources/test.eml")
@@ -30,12 +31,15 @@ with open(test_email_file_path, 'r') as f:
 
 def create_email():
     """Create a testing email."""
+    email_hash = find_email_id(DEFAULT_FULL_TEXT)
+    # TODO: tune the tests to use the db_utility.py (2)
     return Email.objects.create(full_text=DEFAULT_FULL_TEXT,
                                 subject=DEFAULT_SUBJECT,
                                 recipient_email=DEFAULT_RECIPIENT,
                                 sender_email=DEFAULT_SENDER_EMAIL,
                                 sender_ip=DEFAULT_SENDER_IP,
-                                submitter=DEFAULT_SUBMITTER)
+                                submitter=DEFAULT_SUBMITTER,
+                                id=email_hash)
 
 
 def create_host(host_name=DEFAULT_HOSTNAME):
@@ -58,19 +62,19 @@ class TestUtility(TestCase):
     """Utility for performing repetitive tests."""
 
     def association_test(self, object1, object2, storage_location1,
-                         storage_location2, many_to_one=False):
+                         storage_location2, many_to_one=False, desired_id=1):
         """Test two-way associations."""
         # test relating the first object with the second
         storage_location1.add(object2)
-        self.assertEqual(storage_location1.all()[0].id, 1)
+        self.assertEqual(storage_location1.all()[0].id, desired_id)
 
         # test relating the second object with the first
         if not many_to_one:
             storage_location2.add(object1)
-            self.assertEqual(storage_location2.all()[0].id, 1)
+            self.assertEqual(storage_location2.all()[0].id, desired_id)
         else:
             storage_location2 = object1
-            self.assertEqual(storage_location2.id, 1)
+            self.assertEqual(storage_location2.id, desired_id)
 
     def string_test(self, incoming_object, desired_string):
         """Ensure object's string matches up to the desired string."""
@@ -86,12 +90,12 @@ class EmailTests(TestCase):
     def test_create_email(self):
         """Test email creation."""
         new_email = create_email()
-        self.assertIs(type(new_email.id), int)
+        self.assertIs(type(new_email.id), str)
 
     def test_email_str(self):
         """Test email string."""
         new_email = create_email()
-        relater.string_test(new_email, "1")
+        relater.string_test(new_email, "902b48defa2522c8f690d697ba3dc84f")
 
     def test_relate_email_y_host(self):
         """Test relating an email with a host."""
@@ -99,7 +103,8 @@ class EmailTests(TestCase):
         new_host = create_host()
 
         relater.association_test(new_email, new_host, new_email.host_set,
-                                 new_host.emails)
+                                 new_host.emails,
+                                 desired_id="902b48defa2522c8f690d697ba3dc84f")
 
     def test_relate_email_y_ip_address(self):
         """Test relating an email with an IP address."""
@@ -108,7 +113,8 @@ class EmailTests(TestCase):
 
         relater.association_test(new_email, new_ip_address,
                                  new_email.ipaddress_set,
-                                 new_ip_address.emails)
+                                 new_ip_address.emails,
+                                 desired_id="902b48defa2522c8f690d697ba3dc84f")
 
     def test_relate_email_y_url(self):
         """Test relating an email with a URL."""
@@ -116,7 +122,8 @@ class EmailTests(TestCase):
         new_url = create_url()
 
         relater.association_test(new_email, new_url, new_email.url_set,
-                                 new_url.emails)
+                                 new_url.emails,
+                                 desired_id="902b48defa2522c8f690d697ba3dc84f")
 
 
 class HostTests(TestCase):
@@ -213,7 +220,7 @@ class ViewTests(TestCase):
             'sender_ip': DEFAULT_SENDER_IP
         })
         # ensure email created and system redirects to new email
-        self.assertEqual(response.url, "/email/1/")
+        self.assertEqual(response.url, "/email/1f45b7ea14c4ae6efc872b68fdc4eded/")
 
     def test_email_details_view(self):
         """Test the email details view."""
