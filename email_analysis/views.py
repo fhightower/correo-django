@@ -7,7 +7,7 @@ from django.views import generic
 
 from .models import Email, Host, IPAddress, Url
 from .utility import indicator_parser
-
+from .db_utility import DBEntityCreator
 
 CONFIG = {
     "index_max_emails_listed": 7
@@ -84,12 +84,7 @@ def review(request):
 def save(request):
     """Save an email to the DB."""
     try:
-        # TODO: When I start storing the emails as files, replace the full_text variable below
-        full_email_text = "This is just a placeholder text"
-        email_subject = request.POST.get('email_subject')
-        recipient_email = request.POST.get('recipient_email')
-        sender_email = request.POST.get('sender_email')
-        sender_ip = request.POST.get('sender_ip')
+        entity_creator = DBEntityCreator(request.POST)
     except KeyError as e:
         # Redisplay the question voting form.
         # TODO: implement an error message
@@ -99,38 +94,4 @@ def save(request):
         # })
         print("Error: {}".format(e))
     else:
-        new_email = Email(full_text=full_email_text, subject=email_subject, recipient_email=recipient_email, sender_email=sender_email, sender_ip=sender_ip, submitter="12345678")
-        new_email.save()
-
-        # pull all of the hosts, ips, and urls out of the post statement
-        for entry in request.POST:
-            if entry.startswith("host-"):
-                # create a host
-                new_host = Host(host_name=entry[5:], source="b")
-                new_host.save()
-                new_host.emails.add(new_email)
-            elif entry.startswith("ip-"):
-                # create an ip addressa
-                new_ip = IPAddress(ip_address=entry[3:])
-                new_ip.save()
-                new_ip.emails.add(new_email)
-            elif entry.startswith("url-"):
-                # create a url
-                # TODO: parse query strings, url path, and host name out of the URL more robustly (2)
-                url = entry[4:]
-                url_path = entry[4:].split("/")[1]
-                host = entry[4:].split("/")[0]
-                print("host: {}".format(host))
-                url_host_name = Host(host_name=host, source="b")
-                url_host_name.save()
-                url_host_name.emails.add(new_email)
-
-                new_url = Url(url=url, host=url_host_name)
-
-                if url_path is not None:
-                    new_url.url_path = url_path
-
-                new_url.save()
-                new_url.emails.add(new_email)
-
-        return HttpResponseRedirect(reverse('email_analysis:details', args=(new_email.id,)))
+        return HttpResponseRedirect(reverse('email_analysis:details', args=(entity_creator.email.id,)))

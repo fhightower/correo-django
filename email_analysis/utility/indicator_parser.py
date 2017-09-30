@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""."""
+"""Utility class to parse indiators from text."""
 
 import re
 
