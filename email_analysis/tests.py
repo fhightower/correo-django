@@ -62,19 +62,19 @@ class TestUtility(TestCase):
     """Utility for performing repetitive tests."""
 
     def association_test(self, object1, object2, storage_location1,
-                         storage_location2, many_to_one=False, desired_id=1):
+                         storage_location2, many_to_one=False, desired_object1_id=1):
         """Test two-way associations."""
         # test relating the first object with the second
         storage_location1.add(object2)
-        self.assertEqual(storage_location1.all()[0].id, desired_id)
+        self.assertEqual(storage_location1.all()[0].id, 1)
 
         # test relating the second object with the first
         if not many_to_one:
             storage_location2.add(object1)
-            self.assertEqual(storage_location2.all()[0].id, desired_id)
+            self.assertEqual(storage_location2.all()[0].id, desired_object1_id)
         else:
             storage_location2 = object1
-            self.assertEqual(storage_location2.id, desired_id)
+            self.assertEqual(storage_location2.id, desired_object1_id)
 
     def string_test(self, incoming_object, desired_string):
         """Ensure object's string matches up to the desired string."""
@@ -104,7 +104,7 @@ class EmailTests(TestCase):
 
         relater.association_test(new_email, new_host, new_email.host_set,
                                  new_host.emails,
-                                 desired_id="902b48defa2522c8f690d697ba3dc84f")
+                                 desired_object1_id="902b48defa2522c8f690d697ba3dc84f")
 
     def test_relate_email_y_ip_address(self):
         """Test relating an email with an IP address."""
@@ -114,7 +114,7 @@ class EmailTests(TestCase):
         relater.association_test(new_email, new_ip_address,
                                  new_email.ipaddress_set,
                                  new_ip_address.emails,
-                                 desired_id="902b48defa2522c8f690d697ba3dc84f")
+                                 desired_object1_id="902b48defa2522c8f690d697ba3dc84f")
 
     def test_relate_email_y_url(self):
         """Test relating an email with a URL."""
@@ -123,7 +123,7 @@ class EmailTests(TestCase):
 
         relater.association_test(new_email, new_url, new_email.url_set,
                                  new_url.emails,
-                                 desired_id="902b48defa2522c8f690d697ba3dc84f")
+                                 desired_object1_id="902b48defa2522c8f690d697ba3dc84f")
 
 
 class HostTests(TestCase):
